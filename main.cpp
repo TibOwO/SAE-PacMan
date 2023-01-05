@@ -12,62 +12,50 @@
 
 using namespace std;
 
-void spriteRight(MinGL & window,int posXPacMan,int posYPacMan)
-{
-    //Corps du Pacman coté droite
+
+void map (MinGL &window) {
+    /* 1 */    window << nsShape::Line(nsGraphics::Vec2D(110, 110),nsGraphics::Vec2D(400, 110),nsGraphics::KWhite, 5);
+    /* 2 */    window << nsShape::Line(nsGraphics::Vec2D(400, 110),nsGraphics::Vec2D(400, 200),nsGraphics::KWhite, 5);
+    /* 3 */    window << nsShape::Line(nsGraphics::Vec2D(400, 200),nsGraphics::Vec2D(110, 200),nsGraphics::KWhite, 5);
+    /* 4 */    window << nsShape::Line(nsGraphics::Vec2D(110, 200),nsGraphics::Vec2D(110, 400),nsGraphics::KWhite, 5);
+    /* 5 */    window << nsShape::Line(nsGraphics::Vec2D(310, 310),nsGraphics::Vec2D(310, 400),nsGraphics::KWhite, 5);
+    /* 6 */    window << nsShape::Line(nsGraphics::Vec2D(400, 310),nsGraphics::Vec2D(310, 310),nsGraphics::KWhite, 5);
+    /* 7 */    window << nsShape::Line(nsGraphics::Vec2D(400, 310),nsGraphics::Vec2D(400, 400),nsGraphics::KWhite, 5);
+    /* 8 */    window << nsShape::Line(nsGraphics::Vec2D(510, 110),nsGraphics::Vec2D(510, 400),nsGraphics::KWhite, 5);
+    /* 9 */    window << nsShape::Line(nsGraphics::Vec2D(510, 110),nsGraphics::Vec2D(620, 110),nsGraphics::KWhite, 5);
+    /* 10 */    window << nsShape::Line(nsGraphics::Vec2D(620, 110),nsGraphics::Vec2D(620, 310),nsGraphics::KWhite, 5);
+    /* 11 */    window << nsShape::Line(nsGraphics::Vec2D(730, 0),nsGraphics::Vec2D(730, 200),nsGraphics::KWhite, 5);
+    /* 12 */    window << nsShape::Line(nsGraphics::Vec2D(730, 200),nsGraphics::Vec2D(800, 200),nsGraphics::KWhite, 5);
+    /* 13 */    window << nsShape::Line(nsGraphics::Vec2D(800, 200),nsGraphics::Vec2D(800, 400),nsGraphics::KWhite, 5);
+    /* 14 */
+}
+
+void dessiner(MinGL &window) {
+    int posXPacMan = 55;
+    int posYPacMan = 55;
+    //Corps du Pacman
     window << nsShape::Circle(nsGraphics::Vec2D(posXPacMan, posYPacMan), 50, nsGraphics::KYellow);
     //Oeil de Pacman
     window << nsShape::Circle(nsGraphics::Vec2D(posXPacMan+15, posYPacMan-20), 8, nsGraphics::KBlack);
     // Bouche de Pacman.
     window << nsShape::Triangle(nsGraphics::Vec2D(posXPacMan, posYPacMan), nsGraphics::Vec2D(posXPacMan+52, posYPacMan-15), nsGraphics::Vec2D(posXPacMan+45, posYPacMan+35), nsGraphics::KBlack);
 
-}
-
-void spriteLeft(MinGL & window,int posXPacMan,int posYPacMan)
-{
-    //Corps du Pacman coté gauche
-    window << nsShape::Circle(nsGraphics::Vec2D(posXPacMan, posYPacMan), 50, nsGraphics::KYellow);
-    //Oeil de Pacman
-    window << nsShape::Circle(nsGraphics::Vec2D(posXPacMan-15, posYPacMan-20), 8, nsGraphics::KBlack);
-    // Bouche de Pacman.
-    window << nsShape::Triangle(nsGraphics::Vec2D(posXPacMan, posYPacMan), nsGraphics::Vec2D(posXPacMan-52, posYPacMan-15), nsGraphics::Vec2D(posXPacMan-45, posYPacMan+35), nsGraphics::KBlack);
+    //Bords de la fenetre
+    window << nsShape::Line(nsGraphics::Vec2D(0, 0),nsGraphics::Vec2D(1280, 0),nsGraphics::KWhite, 5);
+    window << nsShape::Line(nsGraphics::Vec2D(0, 0),nsGraphics::Vec2D(0, 720),nsGraphics::KWhite, 5);
+    window << nsShape::Line(nsGraphics::Vec2D(1280, 0),nsGraphics::Vec2D(1280, 720),nsGraphics::KWhite, 5);
+    window << nsShape::Line(nsGraphics::Vec2D(0, 720),nsGraphics::Vec2D(1280, 720),nsGraphics::KWhite, 5);
 
 
-}
-void spriteDown(MinGL & window,int posXPacMan,int posYPacMan)
-{
-    //Corps du Pacman coté bas
-    window << nsShape::Circle(nsGraphics::Vec2D(posXPacMan, posYPacMan), 50, nsGraphics::KYellow);
-    //Oeil de Pacman
-    window << nsShape::Circle(nsGraphics::Vec2D(posXPacMan-20, posYPacMan+15), 8, nsGraphics::KBlack);
-    // Bouche de Pacman.
-    window << nsShape::Triangle(nsGraphics::Vec2D(posXPacMan, posYPacMan), nsGraphics::Vec2D(posXPacMan-15, posYPacMan+52), nsGraphics::Vec2D(posXPacMan+35, posYPacMan+45), nsGraphics::KBlack);
 
-}
-void spriteUp(MinGL & window,int posXPacMan,int posYPacMan)
-{
-    //Corps du Pacman coté droite
-    window << nsShape::Circle(nsGraphics::Vec2D(posXPacMan, posYPacMan), 50, nsGraphics::KYellow);
-    //Oeil de Pacman
-    window << nsShape::Circle(nsGraphics::Vec2D(posXPacMan+30, posYPacMan-10), 8, nsGraphics::KBlack);
-    // Bouche de Pacman.
-    window << nsShape::Triangle(nsGraphics::Vec2D(posXPacMan, posYPacMan), nsGraphics::Vec2D(posXPacMan-15, posYPacMan-52), nsGraphics::Vec2D(posXPacMan+35, posYPacMan-45), nsGraphics::KBlack);
 
-}
-void dessiner(MinGL &window) {
-
-    // Contours de la fenêtre
-    window << nsShape::Line(nsGraphics::Vec2D(0, 3),nsGraphics::Vec2D(1680, 3),nsGraphics::KRed, 3);
-    window << nsShape::Line(nsGraphics::Vec2D(3, 3),nsGraphics::Vec2D(3, 1050),nsGraphics::KGreen, 5);
-    window << nsShape::Line(nsGraphics::Vec2D(1680, 3),nsGraphics::Vec2D(1680, 1050),nsGraphics::KYellow, 5);
-    window << nsShape::Line(nsGraphics::Vec2D(0, 980),nsGraphics::Vec2D(1680, 980),nsGraphics::KWhite, 5);
 }
 
 
 int main()
 {
     // Initialise le système
-    MinGL window("01 - Shapes", nsGraphics::Vec2D(1680, 1050), nsGraphics::Vec2D(128, 128), nsGraphics::KBlack);
+    MinGL window("01 - Shapes", nsGraphics::Vec2D(1280, 720), nsGraphics::Vec2D(128, 128), nsGraphics::KBlack);
     window.initGlut();
     window.initGraphic();
 
@@ -85,26 +73,6 @@ int main()
 
         // On dessine les formes géométriques
         dessiner(window);
-        //test
-        int x = 200;
-        int y = 200;
-        char touch;
-        cin>>touch;
-
-        for (unsigned i(0);i<2;++i){
-            if (touch =='d'){
-                spriteRight(window,x,y);
-            }
-            else if (touch == 'q'){
-                spriteLeft(window,x,y);
-            }
-            else if (touch == 's'){
-                spriteDown(window,x,y);
-            }
-            else if (touch == 'z'){
-                spriteUp(window,x,y);
-            }
-        }
 
         // On finit la frame en cours
         window.finishFrame();

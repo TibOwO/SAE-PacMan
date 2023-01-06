@@ -1,202 +1,98 @@
-#include <iostream>
-#include <cstring>
+#define FPS_LIMIT 60
 
+#include <iostream>
+#include <thread>
+
+#include "mingl/mingl.h"
+
+#include "mingl/shape/rectangle.h"
+#include "mingl/shape/circle.h"
+#include "mingl/shape/line.h"
+#include "mingl/shape/triangle.h"
 
 using namespace std;
 
-//Variable d'environnement (taille et Ghosts)
-const int ROW = 20;
-const int COL = 30;
-const int GHOST_COUNT = 4;
+void dessiner(MinGL &window)
+{
+    // Pour dessiner quelque chose avec minGL 2, vous pouvez soit instancier l'objet dans une variable et l'injecter dans la fenêtre...
+    //nsShape::Rectangle rect1(nsGraphics::Vec2D(300, 500), nsGraphics::Vec2D(150, 150), nsGraphics::KBlue);
+    //window << rect1;
 
-// Carte du jeu avec des murs et des points
-char map[ROW][COL];
+    // ...ou l'injecter directement dans la fenêtre!
+    //window << nsShape::Rectangle(nsGraphics::Vec2D(600, 800), nsGraphics::Vec2D(400, 400), nsGraphics::KPurple);
 
-// Map
-void generateRandomMap(char map[ROW][COL]) {
+    // (Vous voyez par ailleurs que l'ordre d'affichage est important, le rectangle violet masque maintenant une partie du rectangle bleu.)
+    // Vous pouvez combiner les différentes formes disponibles pour faire des choses plus complexes.
 
-  srand(time(0));
-  for (int i = 0; i < ROW; i++) {
-    for (int j = 0; j < COL; j++) {
-      // Générer un nombre aléatoire entre 0 et 100
-      int r = rand() % 15;
-      if (r < 3) {
-        map[i][j] = '#';
-      } else if (r > 4) {
-        map[i][j] = ' ';
-      } else {
-        map[i][j] = ' ';
-      }
-    }
-  }
+    // Voilà un bouton de fermeture.
+    //window << nsShape::Circle(nsGraphics::Vec2D(100, 320), 50, nsGraphics::KRed);
+    //window << nsShape::Line(nsGraphics::Vec2D(70, 290), nsGraphics::Vec2D(130, 350), nsGraphics::KWhite, 3.f);
+    //window << nsShape::Line(nsGraphics::Vec2D(130, 290), nsGraphics::Vec2D(70, 350), nsGraphics::KWhite, 3.f);
+
+    // Et voilà la triforce.
+    //window << nsShape::Triangle(nsGraphics::Vec2D(200, 620), nsGraphics::Vec2D(400, 620), nsGraphics::Vec2D(300, 420), nsGraphics::KYellow);
+    //window << nsShape::Triangle(nsGraphics::Vec2D(400, 620), nsGraphics::Vec2D(600, 620), nsGraphics::Vec2D(500, 420), nsGraphics::KYellow);
+    //window << nsShape::Triangle(nsGraphics::Vec2D(300, 420), nsGraphics::Vec2D(500, 420), nsGraphics::Vec2D(400, 220), nsGraphics::KYellow);
+
+    // N'hésitez pas a lire la doc pour plus de détails.
+   //window << nsShape::Circle(nsGraphics::Vec2D(250, 250), 200, nsGraphics::KBlack);
+    //window << nsShape::Circle(nsGraphics::Vec2D(250, 250), 200, nsGraphics::KYellow);
+    //window << nsShape::Triangle(nsGraphics::Vec2D(250, 250), nsGraphics::Vec2D(450, 350), nsGraphics::Vec2D(450, 150), nsGraphics::KBlack);
+    //window << nsShape::Circle(nsGraphics::Vec2D(285, 160), 25, nsGraphics::KBlack);
+
+
+    //Pac-Man
+    window << nsShape::Circle(nsGraphics::Vec2D(300,300), 150, nsGraphics::KYellow);
+    window << nsShape::Circle(nsGraphics::Vec2D(310,240), 20, nsGraphics::KBlack);
+    window << nsShape::Triangle(nsGraphics::Vec2D(300,300), nsGraphics::Vec2D(421,210), nsGraphics::Vec2D(443,250), nsGraphics::KBlack);
+    window << nsShape::Triangle(nsGraphics::Vec2D(300,300), nsGraphics::Vec2D(443,250), nsGraphics::Vec2D(450,300), nsGraphics::KBlack);
+    window << nsShape::Triangle(nsGraphics::Vec2D(300,300), nsGraphics::Vec2D(443,350), nsGraphics::Vec2D(450,300), nsGraphics::KBlack);
+    window << nsShape::Triangle(nsGraphics::Vec2D(300,300), nsGraphics::Vec2D(421,390), nsGraphics::Vec2D(443,350), nsGraphics::KBlack);
+
+    //window << nsShape::Circle(nsGraphics::Vec2D(300,300), 75, nsGraphics::KYellow);
+    //window << nsShape::Circle(nsGraphics::Vec2D(310,240), 10, nsGraphics::KBlack);
+//
+    //window << nsShape::Triangle(nsGraphics::Vec2D(300,300), nsGraphics::Vec2D(421,230), nsGraphics::Vec2D(371,250), nsGraphics::KBlack);
+    //window << nsShape::Triangle(nsGraphics::Vec2D(300,300), nsGraphics::Vec2D(443,250), nsGraphics::Vec2D(450,300), nsGraphics::KBlack);
+    //window << nsShape::Triangle(nsGraphics::Vec2D(300,300), nsGraphics::Vec2D(443,350), nsGraphics::Vec2D(450,300), nsGraphics::KBlack);
+    //window << nsShape::Triangle(nsGraphics::Vec2D(300,300), nsGraphics::Vec2D(421,390), nsGraphics::Vec2D(443,350), nsGraphics::KBlack);
+
 }
 
+int main()
+{
+    // Initialise le système
+    MinGL window("01 - Shapes", nsGraphics::Vec2D(640, 640), nsGraphics::Vec2D(128, 128), nsGraphics::KBlack);
+    window.initGlut();
+    window.initGraphic();
 
-//Propriété Pac-Man
-struct PacMan {
-  int x, y;
-  char c;
-};
+    // Variable qui tient le temps de frame
+    chrono::microseconds frameTime = chrono::microseconds::zero();
 
-//Génération d'un Pac-Man
-PacMan pacman;
+    // On fait tourner la boucle tant que la fenêtre est ouverte
+    while (window.isOpen())
+    {
+        // Récupère l'heure actuelle
+        chrono::time_point<chrono::steady_clock> start = chrono::steady_clock::now();
 
+        // On efface la fenêtre
+        window.clearScreen();
 
-//Propriété d'un Ghost
-struct Ghost {char carte;
+        // On dessine les formes géométriques
+        dessiner(window);
 
-  int x, y;
-  char c;
-};
+        // On finit la frame en cours
+        window.finishFrame();
 
-//Génération de n Ghost (En fonction de la variable GHOST_COUNT)
-Ghost ghosts[GHOST_COUNT];
+        // On vide la queue d'évènements
+        window.getEventManager().clearEvents();
 
-int score = 0;
+        // On attend un peu pour limiter le framerate et soulager le CPU
+        this_thread::sleep_for(chrono::milliseconds(1000 / FPS_LIMIT) - chrono::duration_cast<chrono::microseconds>(chrono::steady_clock::now() - start));
 
-void setup() {
-  pacman.x = 1;
-  pacman.y = 1;
-  pacman.c = 'P';
+        // On récupère le temps de frame
+        frameTime = chrono::duration_cast<chrono::microseconds>(chrono::steady_clock::now() - start);
+    }
 
-  for (int i = 0; i <= GHOST_COUNT; i++) {
-    ghosts[i].x = rand()% ROW + 1;
-    ghosts[i].y = rand() % COL + 1;
-    ghosts[i].c = 'G';
-  }
+    return 0;
 }
-
-//void moveGhosts() {
-//  for (int i = 0; i < GHOST_COUNT; i++) {
-//    Ghost ghost = ghosts[i];
-//    int dx = 0, dy = 0;
-//    // Déplacer le fantôme vers le Pac-Man
-//    if (ghost.x < pacman.x) {
-//      dx = 1;
-//    } else if (ghost.x > pacman.x) {
-//      dx = -1;
-//    }
-//    if (ghost.y < pacman.y) {
-//      dy = 1;
-//    } else if (ghost.y > pacman.y) {
-//      dy = -1;
-//    }
-//    ghost.x += dx;
-//    ghost.y += dy;
-//  }
-//}
-
-void moveGhosts() {
-  for (int i = 0; i <= GHOST_COUNT; i++) {
-    Ghost ghost = ghosts[i];
-    int dx = 0, dy = 0;
-    // Déplacer le fantôme aléatoirement dans l'une des 4 directions
-    int r = rand() % 6;
-    if (r == 0) {
-      dx = -1;
-    } else if (r == 1) {
-      dx = 1;
-    } else if (r == 2) {
-      dy = -1;
-    } else if (r == 3) {
-      dy = 1;
-    } else if (r == 4) {
-      dx = 0;
-    } else if (r == 5) {
-      dy = 0;
-    }
-    // Vérifier que le déplacement ne met pas le fantôme sur un mur
-    if (map[ghost.y + dy][ghost.x + dx] == '#') {
-      ghost.x += dx;
-      ghost.y += dy;
-    }
-  }
-}
-
-
-//Affiche les Ghost sur la map
-void drawGhosts(char map[ROW][COL]) {
-  for (int i = 0; i < GHOST_COUNT; i++) {
-    Ghost ghost = ghosts[i];
-    // Vérifier que le fantôme ne se trouve pas sur un mur
-    if (map[ghost.y][ghost.x] != '#') {
-      map[ghost.y][ghost.x] = ghost.c;
-    }
-  }
-}
-
-void placeGhostsRandomly(char map[ROW][COL]) {
-  for (int i = 0; i < GHOST_COUNT; i++) {
-    Ghost ghost = ghosts[i];
-    while (true) {
-      // Générer des coordonnées aléatoires
-      ghost.x = rand() % COL;
-      ghost.y = rand() % ROW;
-      // Vérifier que la case n'est pas un mur
-      if (map[ghost.y][ghost.x] != '#') {
-        break;
-      }
-    }
-  }
-}
-
-
-void draw() {
-  for (int i = 0; i < ROW; i++) {
-    for (int j = 0; j < COL; j++) {
-      if (i == pacman.y && j == pacman.x) {
-        cout << pacman.c;
-      } else {
-        cout << map[i][j];
-      }
-    }
-    cout << endl;
-  }
-  cout << "Score: " << score << endl;
-}
-
-int main() {
-    generateRandomMap(map);
-    placeGhostsRandomly(map);
-  setup();
-  while (true) {
-    moveGhosts();
-    drawGhosts(map);
-    draw();
-    string verif;
-    cin >> verif;
-    char input = verif[0];
-    if (input == 'z') {
-      pacman.y--;
-    } else if (input == 'q') {
-      pacman.x--;
-    } else if (input == 's') {
-      pacman.y++;
-    } else if (input == 'd') {
-      pacman.x++;
-    }
-
-    if (map[pacman.y][pacman.x] == '#') {
-      // Annuler le mouvement
-      if (input == 'z') {
-        pacman.y++;
-      } else if (input == 'q') {
-        pacman.x++;
-      } else if (input == 's') {
-        pacman.y--;
-      } else if (input == 'd') {
-        pacman.x--;
-      }
-    }
-
-    for (int i = 0; i < GHOST_COUNT; i++) {
-      Ghost ghost = ghosts[i];
-      if (ghost.x == pacman.x && ghost.y == pacman.y) {
-        cout << "Game Over" << endl;
-        return 0;
-      }
-    }
-  }
-  return 0;
-}
-

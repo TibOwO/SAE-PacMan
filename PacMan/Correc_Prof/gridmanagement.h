@@ -35,7 +35,7 @@ void Color (const std::string & Col);
  * @fn void DisplayGrid (const CMat & Mat, const CMyParam & Params, bool ShowLineNumber = true, bool ShowColor = true);
  */
 void DisplayGrid (const CMat & Mat, const CMyParam & Param);
-
+void DisplayGridV2 (const CMat & Mat, const CMyParam & Param);
 
 /*!
  * \brief Initialization of the Matrix from scratch

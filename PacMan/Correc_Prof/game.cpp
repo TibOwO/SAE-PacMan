@@ -16,7 +16,7 @@ void ShowMap (const map<T,U> & AMap){
 void MoveToken (CMat & Mat, const char & Move, CPosition & Pos)
 {
     char car = Mat [Pos.first][Pos.second];
-  Mat [Pos.first][Pos.second] = KEmpty;
+    Mat [Pos.first][Pos.second] = KEmpty;
     switch (Move)
     {
     case 'Z':
@@ -73,6 +73,7 @@ int ppal (void)
 
     InitGrid(Mat,Param, PosPlayer1, PosPlayer2);
 
+
     DisplayGrid (Mat, Param);
 
     while (PartyNum <= KMaxPartyNum && ! Victory)
@@ -87,7 +88,8 @@ int ppal (void)
         Move = toupper (Move);
         MoveToken (Mat, Move, (Player1Turn ? PosPlayer1: PosPlayer2));
         ClearScreen();
-        DisplayGrid (Mat, Param);
+
+        DisplayGridV2 (Mat, Param);
 
         //Victory test
         if (PosPlayer1 == PosPlayer2) Victory = true;

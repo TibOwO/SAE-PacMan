@@ -6,3 +6,7 @@ CONFIG -= qt
 SOURCES += \
         main.cpp
 include(mingl/mingl.pri)
+
+
+DISTFILES += \
+    config.yaml

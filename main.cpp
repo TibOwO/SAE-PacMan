@@ -1,29 +1,41 @@
 #include <iostream>
 #include <cstring>
 
-// Library Raoul code
-#define FPS_LIMIT 60
-
-#include <thread>
-
-#include "mingl/mingl.h"
-
-#include "mingl/shape/rectangle.h"
-#include "mingl/shape/circle.h"
-#include "mingl/shape/line.h"
-#include "mingl/shape/triangle.h"
+/**
+ * \file   main.cpp
+ * \authors Thibault AMETTLER, Enzo BEDOS, Enzo COMBELONGE, Francesco LIMOSANI, Raoul MAOULIDA
+ * \date Janvier 13 2023
+ * \brief   Projet C++ "Voleur/Policier" sur le modele de PacMan
+ */
 
 using namespace std;
 
 //Variable d'environnement (taille et Ghosts)
+/**
+ * @brief ROW
+ * @return Variable definissant la dimention sur l'axe X (le nombre de caractère sur une ligne)
+ */
 const int ROW = 20;
+/**
+ * @brief COL
+ * @return Variable definissant la dimention sur l'axe Y (le nombre de caractère sur une colonne)
+ */
 const int COL = 30;
+
+/**
+ * @brief GHOST_COUNT
+ * @return Variable definissant le nombre de fantome sur la carte
+ */
 const int GHOST_COUNT = 4;
 
 // Carte du jeu avec des murs et des points
 char Pacmap[ROW][COL];
 
 // Map
+/**
+ * @brief generateRandomMap
+ * @return Génère une carte de façon aléatoire qui a pour paramètre les dimentions de la carte Map[ROW][COL], où ROW et COL variable int defini au préalable.
+ */
 void generateRandomMap(char Pacmap[ROW][COL]) {
 
     srand(time(0));
@@ -120,10 +132,7 @@ void drawGhosts(char Pacmap[ROW][COL]) {
         if (Pacmap[ghost.y][ghost.x] != '#') {
             Pacmap[ghost.y][ghost.x] = ghost.c;
         }
-        else
-        {
 
-        }
     }
 }
 
@@ -212,3 +221,4 @@ int main() {
     }
     return 0;
 }
+

@@ -1,0 +1,8 @@
+KeyLeft : q
+KeyRight : d
+NbColumn : 10
+NbRow : 10
+VesselColor : KBlue
+InvaderColor :  KGreen
+VesselToken : X
+InvaderToken : O
